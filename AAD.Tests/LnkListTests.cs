@@ -201,6 +201,7 @@ public class LnkListTests
         Assert.True(ll.RemoveAt(0));
 
         Assert.Equal(Array.Empty<string>(), ll.ToArray());
+        Assert.Equal(0, ll.Count());
     }
 
     [Fact]
@@ -211,6 +212,7 @@ public class LnkListTests
         Assert.True(ll.RemoveAt(2));
 
         Assert.Equal(new[] { "A", "B" }, ll.ToArray());
+        Assert.Equal(2, ll.Count());
     }
     
     [Fact]
@@ -221,6 +223,7 @@ public class LnkListTests
         Assert.True(ll.RemoveAt(1));
 
         Assert.Equal(new[] { "A", "C" }, ll.ToArray());
+        Assert.Equal(2, ll.Count());
     }
 
     [Fact]
@@ -237,16 +240,6 @@ public class LnkListTests
         var ll = LnkList<int>.From(1, 2, 3, 4);
 
         Assert.Equal(4, ll.Count());
-    }
-    
-    [Fact]
-    public void Count_AfterRemove()
-    {
-        var ll = LnkList<int>.From(1, 2, 3, 4);
-
-        ll.Remove(1);
-        
-        Assert.Equal(3, ll.Count());
     }
 
     [Fact]
