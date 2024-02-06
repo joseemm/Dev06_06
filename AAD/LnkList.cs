@@ -1,7 +1,7 @@
 namespace AAD;
 
-public class LnkList<T> {
-    
+public class LnkList<T> where T : notnull
+{
     public static LnkList<T> From(params T[] values)
     {
         var ll = new LnkList<T>();
@@ -27,7 +27,13 @@ public class LnkList<T> {
         _count = 0;
     }
 
-    // O(1)
+    public void Prepend(T value) =>
+        _head = new LnkNode<T>(value, _head);
+
+    /// <summary>
+    /// O(1)
+    /// </summary>
+    /// <param name="element"></param>
     public void Add(T element)
     {
         var newNode = new LnkNode<T>(element);
@@ -40,11 +46,15 @@ public class LnkList<T> {
             _last.Next = newNode;
             _last = newNode;
         }
-        
+
         _count++;
     }
 
-    // O(n)
+    /// <summary>
+    /// O(n)
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="value"></param>
     public void Insert(int index, T value)
     {
         // O(1)
@@ -65,9 +75,7 @@ public class LnkList<T> {
         {
             if (currentIndex == index - 1)
             {
-                var newNode = new LnkNode<T>(value, current.Next);
-                newNode.Next = current.Next;
-                current.Next = newNode;
+                current.Next = new LnkNode<T>(value, current.Next);
                 return;
             }
 
@@ -76,11 +84,18 @@ public class LnkList<T> {
         }
     }
 
-    // O(1)
-    public int Count() => 
+    /// <summary>
+    /// O(1)
+    /// </summary>
+    /// <returns></returns>
+    public int Count() =>
         _count;
-    
-    // O(n)
+
+
+    /// <summary>
+    /// O(n)
+    /// </summary>
+    /// <returns></returns>
     public T[] ToArray()
     {
         if (_head == null)
@@ -96,5 +111,57 @@ public class LnkList<T> {
         }
 
         return result.ToArray();
+    }
+
+    public T this[int index]
+    {
+        get
+        {
+            if (_head == null)
+                throw new IndexOutOfRangeException();
+
+            if (index > _count - 1)
+                throw new IndexOutOfRangeException();
+
+            var currentIndex = 0;
+            var current = _head;
+            while (current != null)
+            {
+                if (currentIndex == index)
+                    break;
+                currentIndex++;
+                current = current.Next;
+            }
+
+            return current.Value;
+        }
+    }
+
+    public bool Remove(T value)
+    {
+        if (_head == null)
+            return false;
+
+        if (_head.ValueEquals(value) && _head.IsLast)
+        {
+            _head = null;
+            return true;
+        }
+
+        var currentNode = _head;
+        while (!currentNode.IsLast)
+        {
+            var nextNode = currentNode.Next;
+
+            if (nextNode.ValueEquals(value))
+            {
+                currentNode.Next = nextNode.Next;
+                return true;
+            }
+
+            currentNode = currentNode.Next;
+        }
+
+        return false;
     }
 }
