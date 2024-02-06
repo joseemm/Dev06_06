@@ -68,6 +68,7 @@ public class LnkListTests
         ll.Add("One");
 
         Assert.Equal(new[] { "One" }, ll.ToArray());
+        Assert.Equal("One", ll.Last());
     }
 
     [Fact]
@@ -223,6 +224,7 @@ public class LnkListTests
 
         Assert.Equal(new[] { "A", "B" }, ll.ToArray());
         Assert.Equal(2, ll.Count());
+        Assert.Equal("B", ll.Last());
     }
     
     [Fact]
@@ -234,6 +236,7 @@ public class LnkListTests
 
         Assert.Equal(new[] { "A", "C" }, ll.ToArray());
         Assert.Equal(2, ll.Count());
+        Assert.Equal("C", ll.Last());
     }
 
     [Fact]
@@ -252,6 +255,22 @@ public class LnkListTests
         Assert.Equal(4, ll.Count());
     }
 
+    [Fact]
+    public void Last()
+    {
+        var ll = LnkList<int>.From(1, 2, 3);
+
+        Assert.Equal(3, ll.Last());
+    }
+    
+    [Fact]
+    public void Last_Empty()
+    {
+        var ll = new LnkList<string>();
+
+        Assert.Throws<InvalidOperationException>(() => ll.Last());
+    }
+    
     [Fact]
     public void From()
     {

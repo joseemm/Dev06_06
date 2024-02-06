@@ -156,7 +156,7 @@ public class LnkList<T> where T : notnull
 
         if (_head.Next == null)
         {
-            _head = _head.Next;
+            _head = _last = null;
             _count--;
             return true;
         }
@@ -167,8 +167,11 @@ public class LnkList<T> where T : notnull
         {
             if (currentIndex == index - 1)
             {
-                var nextNode = currentNode.Next;
-                currentNode.Next = nextNode?.Next;
+                var nodeToRemove = currentNode.Next;
+                if (nodeToRemove.Next == null) 
+                    _last = currentNode;
+
+                currentNode.Next = nodeToRemove?.Next;
                 _count--;
                 return true;
             }
@@ -198,5 +201,13 @@ public class LnkList<T> where T : notnull
         }
 
         return result.ToArray();
+    }
+
+    public T Last()
+    {
+        if (_last == null)
+            throw new InvalidOperationException();
+        
+        return _last.Value;
     }
 }
