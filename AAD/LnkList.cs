@@ -85,8 +85,7 @@ public class LnkList<T> where T : notnull
         // O(1)
         if (index == 0)
         {
-            var newNode = new LnkNode<T>(value, _head);
-            _head = newNode;
+            Prepend(value);
             return;
         }
 
