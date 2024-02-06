@@ -5,7 +5,7 @@ public class LnkListTests
     [Fact]
     public void Prepend_Empty()
     {
-        var ll = new LnkList<int>();
+        var ll = Empty<int>();
 
         ll.Prepend(100);
 
@@ -15,7 +15,7 @@ public class LnkListTests
     [Fact]
     public void Prepend_Many()
     {
-        var ll = LnkList<int>.From(2, 3, 4);
+        var ll = From(2, 3, 4);
 
         ll.Prepend(1);
 
@@ -25,7 +25,7 @@ public class LnkListTests
     [Fact]
     public void GetByIndex_Empty()
     {
-        var ll = new LnkList<int>();
+        var ll = Empty<int>();
 
         Assert.Throws<IndexOutOfRangeException>(() => ll[1]);
     }
@@ -61,7 +61,7 @@ public class LnkListTests
     [Fact]
     public void Add_Empty()
     {
-        var ll = new LnkList<string>();
+        var ll = Empty<string>();
 
         ll.Add("One");
 
@@ -71,7 +71,7 @@ public class LnkListTests
     [Fact]
     public void Add_Many()
     {
-        var ll = LnkList<int>.From(1, 2, 3);
+        var ll = From(1, 2, 3);
 
         ll.Add(4);
 
@@ -81,7 +81,7 @@ public class LnkListTests
     [Fact]
     public void Insert_Empty()
     {
-        var ll = new LnkList<string>();
+        var ll = Empty<string>();
 
         Assert.Throws<IndexOutOfRangeException>(() => ll.Insert(0, "Juan"));
     }
@@ -109,7 +109,7 @@ public class LnkListTests
     [Fact]
     public void Remove_EmptyList()
     {
-        var ll = new LnkList<string>();
+        var ll = Empty<string>();
 
         Assert.False(ll.Remove("Hello"));
     }
@@ -153,7 +153,7 @@ public class LnkListTests
     [Fact]
     public void Remove_DoesNotExists_Empty()
     {
-        var ll = new LnkList<string>();
+        var ll = Empty<string>();
 
         var result = ll.Remove("Ghost");
 
@@ -186,7 +186,7 @@ public class LnkListTests
     [Fact]
     public void RemoveAt_Empty()
     {
-        var ll = new LnkList<string>();
+        var ll = Empty<string>();
 
         Assert.Throws<IndexOutOfRangeException>(
             () => ll.RemoveAt(10));
@@ -225,7 +225,7 @@ public class LnkListTests
     [Fact]
     public void Count_Empty()
     {
-        var ll = new LnkList<int>();
+        var ll = Empty<int>();
 
         Assert.Equal(0, ll.Count());
     }
@@ -233,7 +233,7 @@ public class LnkListTests
     [Fact]
     public void Count_Many()
     {
-        var ll = LnkList<int>.From(1, 2, 3, 4);
+        var ll = From(1, 2, 3, 4);
 
         Assert.Equal(4, ll.Count());
     }
@@ -241,7 +241,7 @@ public class LnkListTests
     [Fact]
     public void Last()
     {
-        var ll = LnkList<int>.From(1, 2, 3);
+        var ll = From(1, 2, 3);
 
         Assert.Equal(3, ll.Last());
     }
@@ -249,15 +249,15 @@ public class LnkListTests
     [Fact]
     public void Last_Empty()
     {
-        var ll = new LnkList<string>();
+        var ll = Empty<string>();
 
         Assert.Throws<InvalidOperationException>(() => ll.Last());
     }
 
     [Fact]
-    public void From()
+    public void FromTest()
     {
-        var ll = LnkList<int>.From(1, 2, 3);
+        var ll = From(1, 2, 3);
 
         AssertEqual(new[] { 1, 2, 3 }, ll);
     }
@@ -265,7 +265,7 @@ public class LnkListTests
     [Fact]
     public void ToArray_Empty()
     {
-        var ll = new LnkList<int>();
+        var ll = Empty<int>();
 
         AssertEqual(Array.Empty<int>(), ll);
     }
@@ -273,7 +273,7 @@ public class LnkListTests
     [Fact]
     public void ToArray_OneElement()
     {
-        var ll = LnkList<int>.From(1);
+        var ll = From(1);
         ;
 
         AssertEqual(new[] { 1 }, ll);
@@ -282,7 +282,7 @@ public class LnkListTests
     [Fact]
     public void ToArray_TwoElements()
     {
-        var ll = LnkList<int>.From(1, 2);
+        var ll = From(1, 2);
         ;
 
         AssertEqual(new[] { 1, 2 }, ll);
@@ -291,16 +291,20 @@ public class LnkListTests
     [Fact]
     public void ToArray_Many()
     {
-        var ll = LnkList<int>.From(1, 2, 3, 4);
+        var ll = From(1, 2, 3, 4);
 
         AssertEqual(new[] { 1, 2, 3, 4 }, ll);
     }
 
-    private void AssertEqual<T>(T[] values, LnkList<T> ll) where T : notnull
+    protected virtual void AssertEqual<T>(T[] values, LnkList<T> ll) where T : notnull
     {
         Assert.Equal(values, ll.ToArray());
         Assert.Equal(values.Length, ll.Count());
         if (values.Length > 0)
             Assert.Equal(values.Last(), ll.Last());
     }
+
+    protected virtual LnkList<T> Empty<T>() where T : notnull => new();
+    
+    protected virtual LnkList<T> From<T>(params T[] values) where T : notnull => LnkList<T>.From(values);
 }
