@@ -10,6 +10,7 @@ public class LnkListTests
         ll.Prepend(100);
 
         Assert.Equal(new[] { 100 }, ll.ToArray());
+        Assert.Equal(1, ll.Count());
     }
 
     [Fact]
@@ -20,6 +21,7 @@ public class LnkListTests
         ll.Prepend(1);
 
         Assert.Equal(new[] { 1, 2, 3, 4 }, ll.ToArray());
+        Assert.Equal(4, ll.Count());
     }
 
     [Fact]
