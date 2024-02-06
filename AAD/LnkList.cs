@@ -67,7 +67,7 @@ public class LnkList<T> where T : notnull
             _head = _last = newNode;
         else // O(1)
         {
-            _last.Next = newNode;
+            _last.Link(newNode);
             _last = newNode;
         }
 
@@ -98,7 +98,7 @@ public class LnkList<T> where T : notnull
         {
             if (currentIndex == index - 1)
             {
-                current.Next = new LnkNode<T>(value, current.Next);
+                current.Link(new LnkNode<T>(value, current.Next));
                 _count++;
                 return;
             }
@@ -135,7 +135,7 @@ public class LnkList<T> where T : notnull
 
             if (nextNode != null && nextNode.ValueEquals(value))
             {
-                currentNode.Next = nextNode.Next;
+                currentNode.Link(nextNode.Next);
                 _count -= 1;
                 return true;
             }
@@ -167,7 +167,7 @@ public class LnkList<T> where T : notnull
         if (nodeToRemove.IsLast)
             _last = nodeBefore;
         
-        nodeBefore.Next = nodeToRemove.Next;
+        nodeBefore.Link(nodeToRemove.Next);
         _count--;
         return true;
     }
