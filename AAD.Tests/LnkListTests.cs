@@ -9,8 +9,7 @@ public class LnkListTests
 
         ll.Prepend(100);
 
-        Assert.Equal(new[] { 100 }, ll.ToArray());
-        Assert.Equal(1, ll.Count());
+        AssertEqual(new[] { 100 }, ll);
     }
 
     [Fact]
@@ -20,8 +19,7 @@ public class LnkListTests
 
         ll.Prepend(1);
 
-        Assert.Equal(new[] { 1, 2, 3, 4 }, ll.ToArray());
-        Assert.Equal(4, ll.Count());
+        AssertEqual(new[] { 1, 2, 3, 4 }, ll);
     }
 
     [Fact]
@@ -67,8 +65,7 @@ public class LnkListTests
 
         ll.Add("One");
 
-        Assert.Equal(new[] { "One" }, ll.ToArray());
-        Assert.Equal("One", ll.Last());
+        AssertEqual(new[] { "One" }, ll);
     }
 
     [Fact]
@@ -78,7 +75,7 @@ public class LnkListTests
 
         ll.Add(4);
 
-        Assert.Equal(new[] { 1, 2, 3, 4 }, ll.ToArray());
+        AssertEqual(new[] { 1, 2, 3, 4 }, ll);
     }
 
     [Fact]
@@ -86,9 +83,7 @@ public class LnkListTests
     {
         var ll = new LnkList<string>();
 
-        ll.Insert(0, "Juan");
-
-        Assert.Equal(Array.Empty<string>(), ll.ToArray());
+        Assert.Throws<IndexOutOfRangeException>(() => ll.Insert(0, "Juan"));
     }
 
     [Fact]
@@ -98,9 +93,7 @@ public class LnkListTests
 
         ll.Insert(0, "Juan");
 
-        Assert.Equal(new[] { "Juan", "Pablo" },
-            ll.ToArray());
-        Assert.Equal(2, ll.Count());
+        AssertEqual(new[] { "Juan", "Pablo" }, ll);
     }
 
     [Fact]
@@ -110,9 +103,7 @@ public class LnkListTests
 
         ll.Insert(1, "Pablo");
 
-        Assert.Equal(new[] { "Juan", "Pablo", "Duarte" },
-            ll.ToArray());
-        Assert.Equal(3, ll.Count());
+        AssertEqual(new[] { "Juan", "Pablo", "Duarte" }, ll);
     }
 
     [Fact]
@@ -132,8 +123,7 @@ public class LnkListTests
 
         Assert.True(result);
 
-        Assert.Equal(Array.Empty<string>(), ll.ToArray());
-        Assert.Equal(0, ll.Count());
+        AssertEqual(Array.Empty<string>(), ll);
     }
 
     [Fact]
@@ -145,8 +135,7 @@ public class LnkListTests
 
         Assert.True(result);
 
-        Assert.Equal(new[] { "A" }, ll.ToArray());
-        Assert.Equal(1, ll.Count());
+        AssertEqual(new[] { "A" }, ll);
     }
 
     [Fact]
@@ -158,8 +147,7 @@ public class LnkListTests
 
         Assert.True(result);
 
-        Assert.Equal(new[] { "Bread", "Butter" }, ll.ToArray());
-        Assert.Equal(2, ll.Count());
+        AssertEqual(new[] { "Bread", "Butter" }, ll);
     }
 
     [Fact]
@@ -211,8 +199,7 @@ public class LnkListTests
 
         Assert.True(ll.RemoveAt(0));
 
-        Assert.Equal(Array.Empty<string>(), ll.ToArray());
-        Assert.Equal(0, ll.Count());
+        AssertEqual(Array.Empty<string>(), ll);
     }
 
     [Fact]
@@ -222,11 +209,9 @@ public class LnkListTests
 
         Assert.True(ll.RemoveAt(2));
 
-        Assert.Equal(new[] { "A", "B" }, ll.ToArray());
-        Assert.Equal(2, ll.Count());
-        Assert.Equal("B", ll.Last());
+        AssertEqual(new[] { "A", "B" }, ll);
     }
-    
+
     [Fact]
     public void RemoveAt_MiddleOfManyElements()
     {
@@ -234,9 +219,7 @@ public class LnkListTests
 
         Assert.True(ll.RemoveAt(1));
 
-        Assert.Equal(new[] { "A", "C" }, ll.ToArray());
-        Assert.Equal(2, ll.Count());
-        Assert.Equal("C", ll.Last());
+        AssertEqual(new[] { "A", "C" }, ll);
     }
 
     [Fact]
@@ -262,7 +245,7 @@ public class LnkListTests
 
         Assert.Equal(3, ll.Last());
     }
-    
+
     [Fact]
     public void Last_Empty()
     {
@@ -270,13 +253,13 @@ public class LnkListTests
 
         Assert.Throws<InvalidOperationException>(() => ll.Last());
     }
-    
+
     [Fact]
     public void From()
     {
         var ll = LnkList<int>.From(1, 2, 3);
 
-        Assert.Equal(new[] { 1, 2, 3 }, ll.ToArray());
+        AssertEqual(new[] { 1, 2, 3 }, ll);
     }
 
     [Fact]
@@ -284,7 +267,7 @@ public class LnkListTests
     {
         var ll = new LnkList<int>();
 
-        Assert.Equal(Array.Empty<int>(), ll.ToArray());
+        AssertEqual(Array.Empty<int>(), ll);
     }
 
     [Fact]
@@ -293,7 +276,7 @@ public class LnkListTests
         var ll = LnkList<int>.From(1);
         ;
 
-        Assert.Equal(new[] { 1 }, ll.ToArray());
+        AssertEqual(new[] { 1 }, ll);
     }
 
     [Fact]
@@ -302,7 +285,7 @@ public class LnkListTests
         var ll = LnkList<int>.From(1, 2);
         ;
 
-        Assert.Equal(new[] { 1, 2 }, ll.ToArray());
+        AssertEqual(new[] { 1, 2 }, ll);
     }
 
     [Fact]
@@ -310,6 +293,14 @@ public class LnkListTests
     {
         var ll = LnkList<int>.From(1, 2, 3, 4);
 
-        Assert.Equal(new[] { 1, 2, 3, 4 }, ll.ToArray());
+        AssertEqual(new[] { 1, 2, 3, 4 }, ll);
+    }
+
+    private void AssertEqual<T>(T[] values, LnkList<T> ll) where T : notnull
+    {
+        Assert.Equal(values, ll.ToArray());
+        Assert.Equal(values.Length, ll.Count());
+        if (values.Length > 0)
+            Assert.Equal(values.Last(), ll.Last());
     }
 }

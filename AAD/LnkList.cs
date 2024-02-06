@@ -51,6 +51,10 @@ public class LnkList<T> where T : notnull
     public void Prepend(T value)
     {
         _head = new LnkNode<T>(value, _head);
+        
+        if (_head.IsLast)
+            _last = _head;
+        
         _count++;
     }
 
@@ -83,7 +87,7 @@ public class LnkList<T> where T : notnull
     {
         // O(1)
         if (Count() == 0)
-            return;
+            throw new IndexOutOfRangeException();
 
         // O(1)
         if (index == 0)
@@ -136,6 +140,8 @@ public class LnkList<T> where T : notnull
             if (nextNode != null && nextNode.ValueEquals(value))
             {
                 currentNode.Link(nextNode.Next);
+                if (currentNode.IsLast) 
+                    _last = currentNode;
                 _count -= 1;
                 return true;
             }
