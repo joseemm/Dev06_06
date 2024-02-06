@@ -117,9 +117,10 @@ public class LnkList<T> where T : notnull
         if (_head == null)
             return false;
 
-        if (_head.ValueEquals(value) && _head.IsLast)
+        if (_head.ValueEquals(value))
         {
-            _head = null;
+            _head = _head.Next;
+            _count -= 1;
             return true;
         }
 
@@ -131,6 +132,7 @@ public class LnkList<T> where T : notnull
             if (nextNode != null && nextNode.ValueEquals(value))
             {
                 currentNode.Next = nextNode.Next;
+                _count -= 1;
                 return true;
             }
 

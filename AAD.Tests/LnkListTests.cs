@@ -238,6 +238,16 @@ public class LnkListTests
 
         Assert.Equal(4, ll.Count());
     }
+    
+    [Fact]
+    public void Count_AfterRemove()
+    {
+        var ll = LnkList<int>.From(1, 2, 3, 4);
+
+        ll.Remove(1);
+        
+        Assert.Equal(3, ll.Count());
+    }
 
     [Fact]
     public void From()
