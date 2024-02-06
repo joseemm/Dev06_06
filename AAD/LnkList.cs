@@ -27,6 +27,27 @@ public class LnkList<T> where T : notnull
         _count = 0;
     }
 
+    public T this[int index] => Get(index);
+
+    public T Get(int index)
+    {
+        if (_head == null || index >= _count)
+            throw new IndexOutOfRangeException();
+
+        var currentIndex = 0;
+        var current = _head;
+        while (current != null)
+        {
+            if (currentIndex == index)
+                break;
+            
+            currentIndex++;
+            current = current.Next;
+        }
+
+        return current.Value;
+    }
+
     public void Prepend(T value) =>
         _head = new LnkNode<T>(value, _head);
 
@@ -92,6 +113,65 @@ public class LnkList<T> where T : notnull
         _count;
 
 
+    public bool Remove(T value)
+    {
+        if (_head == null)
+            return false;
+
+        if (_head.ValueEquals(value) && _head.IsLast)
+        {
+            _head = null;
+            return true;
+        }
+
+        var currentNode = _head;
+        while (currentNode != null)
+        {
+            var nextNode = currentNode.Next;
+
+            if (nextNode != null && nextNode.ValueEquals(value))
+            {
+                currentNode.Next = nextNode.Next;
+                return true;
+            }
+
+            currentNode = currentNode.Next;
+        }
+
+        return false;
+    }
+
+    public bool RemoveAt(int index)
+    {
+        if (_head == null)
+            throw new IndexOutOfRangeException();
+
+        if (index < 0 || index >= _count)
+            throw new IndexOutOfRangeException();
+
+        if (_head.Next == null)
+        {
+            _head = null;
+            return true;
+        }
+
+        var currentIndex = 0;
+        var currentNode = _head;
+        while (currentNode != null)
+        {
+            if (currentIndex == index - 1)
+            {
+                var nextNode = currentNode.Next;
+                currentNode.Next = nextNode?.Next;
+                return true;
+            }
+
+            currentIndex++;
+            currentNode = currentNode.Next;
+        }
+        return false;
+    }
+
     /// <summary>
     /// O(n)
     /// </summary>
@@ -111,57 +191,5 @@ public class LnkList<T> where T : notnull
         }
 
         return result.ToArray();
-    }
-
-    public T this[int index]
-    {
-        get
-        {
-            if (_head == null)
-                throw new IndexOutOfRangeException();
-
-            if (index > _count - 1)
-                throw new IndexOutOfRangeException();
-
-            var currentIndex = 0;
-            var current = _head;
-            while (current != null)
-            {
-                if (currentIndex == index)
-                    break;
-                currentIndex++;
-                current = current.Next;
-            }
-
-            return current.Value;
-        }
-    }
-
-    public bool Remove(T value)
-    {
-        if (_head == null)
-            return false;
-
-        if (_head.ValueEquals(value) && _head.IsLast)
-        {
-            _head = null;
-            return true;
-        }
-
-        var currentNode = _head;
-        while (!currentNode.IsLast)
-        {
-            var nextNode = currentNode.Next;
-
-            if (nextNode.ValueEquals(value))
-            {
-                currentNode.Next = nextNode.Next;
-                return true;
-            }
-
-            currentNode = currentNode.Next;
-        }
-
-        return false;
     }
 }
