@@ -97,6 +97,7 @@ public class LnkListTests
 
         Assert.Equal(new[] { "Juan", "Pablo" },
             ll.ToArray());
+        Assert.Equal(2, ll.Count());
     }
 
     [Fact]
@@ -108,6 +109,7 @@ public class LnkListTests
 
         Assert.Equal(new[] { "Juan", "Pablo", "Duarte" },
             ll.ToArray());
+        Assert.Equal(3, ll.Count());
     }
 
     [Fact]
@@ -128,6 +130,7 @@ public class LnkListTests
         Assert.True(result);
 
         Assert.Equal(Array.Empty<string>(), ll.ToArray());
+        Assert.Equal(0, ll.Count());
     }
 
     [Fact]
@@ -140,6 +143,7 @@ public class LnkListTests
         Assert.True(result);
 
         Assert.Equal(new[] { "A" }, ll.ToArray());
+        Assert.Equal(1, ll.Count());
     }
 
     [Fact]
@@ -152,6 +156,7 @@ public class LnkListTests
         Assert.True(result);
 
         Assert.Equal(new[] { "Bread", "Butter" }, ll.ToArray());
+        Assert.Equal(2, ll.Count());
     }
 
     [Fact]
@@ -162,6 +167,7 @@ public class LnkListTests
         var result = ll.Remove("Ghost");
 
         Assert.False(result);
+        Assert.Equal(0, ll.Count());
     }
 
     [Fact]
@@ -172,6 +178,7 @@ public class LnkListTests
         var result = ll.Remove("B");
 
         Assert.False(result);
+        Assert.Equal(1, ll.Count());
     }
 
     [Fact]
@@ -182,6 +189,7 @@ public class LnkListTests
         var result = ll.Remove("D");
 
         Assert.False(result);
+        Assert.Equal(3, ll.Count());
     }
 
     [Fact]

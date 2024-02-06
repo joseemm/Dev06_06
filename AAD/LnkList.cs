@@ -82,7 +82,7 @@ public class LnkList<T> where T : notnull
     public void Insert(int index, T value)
     {
         // O(1)
-        if (_count == 0)
+        if (Count() == 0)
             return;
 
         // O(1)
@@ -99,6 +99,7 @@ public class LnkList<T> where T : notnull
             if (currentIndex == index - 1)
             {
                 current.Next = new LnkNode<T>(value, current.Next);
+                _count++;
                 return;
             }
 
@@ -123,7 +124,7 @@ public class LnkList<T> where T : notnull
         if (_head.ValueEquals(value))
         {
             _head = _head.Next;
-            _count -= 1;
+            _count--;
             return true;
         }
 
