@@ -161,25 +161,31 @@ public class LnkList<T> where T : notnull
             return true;
         }
 
+        var nodeBefore = GetNode(index - 1);
+        var nodeToRemove = nodeBefore.Next;
+        
+        if (nodeToRemove.IsLast)
+            _last = nodeBefore;
+        
+        nodeBefore.Next = nodeToRemove.Next;
+        _count--;
+        return true;
+    }
+
+    private LnkNode<T>? GetNode(int index)
+    {
         var currentIndex = 0;
         var currentNode = _head;
         while (currentNode != null)
         {
-            if (currentIndex == index - 1)
-            {
-                var nodeToRemove = currentNode.Next;
-                if (nodeToRemove.Next == null) 
-                    _last = currentNode;
-
-                currentNode.Next = nodeToRemove?.Next;
-                _count--;
-                return true;
-            }
-
+            if (currentIndex == index)
+                return currentNode;
+            
             currentIndex++;
             currentNode = currentNode.Next;
         }
-        return false;
+
+        return null;
     }
 
     /// <summary>
