@@ -68,82 +68,111 @@ public class LnkList<T> where T : notnull
 
     // O(1)
 
-    public void Add(T element)
+   public void Add(T element)
+{
+    var newNode = new LnkNode<T>(element);
+
+    // O(1)
+    if (_head == null)
+        _head = _last = newNode;
+    else // O(1)
     {
-        var newNode = new LnkNode<T>(element);
-
-        // O(1)
-        if (_head == null)
-            _head = _last = newNode;
-        else // O(1)
-        {
-            _last!.Next = newNode;
-            _last = newNode;
-        }
-
-        _count++;
+        _last!.Next = newNode;
+        _last = newNode;
     }
+
+    _count++;
+
+    // usar un método auxiliar para actualizar el tamaño de la lista
+    UpdateSize();
+}
+
+// O(1)
+private void UpdateSize()
+{
+    // incrementar el tamaño si el último nodo no es nulo
+    if (_last != null)
+        _count++;
+}
 
 
     // O(n)
 
-    public void Insert(int index, T value)
+   public void Insert(int index, T value)
+{
+    // O(1)
+    if (_count == 0)
+        return;
+
+    // O(1)
+    if (index == 0)
     {
-        // O(1)
-        if (_count == 0)
-            return;
+        Prepend(value); // usar el método Prepend en lugar de crear un nuevo nodo
+        return;
+    }
 
-        // O(1)
-        if (index == 0)
+    // O(1)
+    if (index == _count)
+    {
+        Append(value); // usar el método Append en lugar de recorrer la lista
+        return;
+    }
+
+    var currentIndex = 0;
+    var current = _head;
+    while (current != null)
+    {
+        if (currentIndex == index - 1)
         {
-            var newNode = new LnkNode<T>(value, _head);
-            _head = newNode;
+            var newNode = new LnkNode<T>(value, current.Next);
+            current.Next = newNode; // no es necesario asignar newNode.Next
             return;
         }
 
-        var currentIndex = 0;
-        var current = _head;
-        while (current != null)
-        {
-            if (currentIndex == index - 1)
-            {
-                var newNode = new LnkNode<T>(value, current.Next);
-                newNode.Next = current.Next;
-                current.Next = newNode;
-                return;
-            }
+        current = current.Next;
+        currentIndex++;
+    }
+}
 
-            current = current.Next;
-            currentIndex++;
-        }
+    private void Append(T value)
+    {
+        throw new NotImplementedException();
     }
 
     public bool Remove(T value)
-    {
-        if (_head == null)
-            return false;
+{
+    if (_head == null)
+        return false;
 
-        if (_head.ValueEquals(value))
+    // usar una variable para guardar el nodo anterior
+    var previousNode = _head;
+    var currentNode = _head.Next;
+
+    // verificar el primer nodo
+    if (_head.ValueEquals(value))
+    {
+        _head = _head.Next;
+        return true;
+    }
+
+    // recorrer la lista desde el segundo nodo
+    while (currentNode != null)
+    {
+        // si el nodo actual tiene el valor buscado
+        if (currentNode.ValueEquals(value))
         {
-            _head = _head.Next;
+            // saltar el nodo actual y enlazar el anterior con el siguiente
+            previousNode.Next = currentNode.Next;
             return true;
         }
 
-        var currentNode = _head;
-        while (currentNode != null)
-        {
-            if (currentNode.NextValueEquals(value))
-            {
-                var nextNode = currentNode.Next;
-                currentNode.Next = nextNode!.Next;
-                return true;
-            }
-
-            currentNode = currentNode.Next;
-        }
-
-        return false;
+        // avanzar los nodos
+        previousNode = currentNode;
+        currentNode = currentNode.Next;
     }
+
+    return false;
+}
 
     public void RemoveAt(int index)
     {
